@@ -5,7 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterMotor))]
 public class MyCharacterController : MonoBehaviour {
     [SerializeField]
-    private int JumpsInAir = 0;
+    private int _JumpsInAir = 0;
+    [SerializeField]
+    private bool _CanOnlyMoveOnGround = false;
 
     private CharacterMotor characterMotor;
     private int jumpInAirDone;
@@ -18,7 +20,10 @@ public class MyCharacterController : MonoBehaviour {
 	public void Move(float density)
     {
         //add colllectable speed multiplier here
-        characterMotor.Move(density);
+        if (characterMotor.IsOnGround || _CanOnlyMoveOnGround == false)
+        {
+            characterMotor.Move(density);
+        }
     }
 
     void Update()
@@ -36,7 +41,7 @@ public class MyCharacterController : MonoBehaviour {
         {
             characterMotor.Jump(1);
         }
-        else if(jumpInAirDone < JumpsInAir)
+        else if(jumpInAirDone < _JumpsInAir)
         {
             jumpInAirDone++;
             characterMotor.Jump(1);
