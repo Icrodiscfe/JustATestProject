@@ -251,35 +251,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114013212142770160, guid: 0942fbf4c27ba3841a044a24bc34118b,
-        type: 2}
-      propertyPath: _MoveSpeed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114013212142770160, guid: 0942fbf4c27ba3841a044a24bc34118b,
-        type: 2}
-      propertyPath: _JumpForce
-      value: 250
-      objectReference: {fileID: 0}
-    - target: {fileID: 1137996101152634, guid: 0942fbf4c27ba3841a044a24bc34118b, type: 2}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114248336835597194, guid: 0942fbf4c27ba3841a044a24bc34118b,
-        type: 2}
-      propertyPath: JumpsInAir
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 50128935196945580, guid: 0942fbf4c27ba3841a044a24bc34118b,
-        type: 2}
-      propertyPath: m_Interpolate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114013212142770160, guid: 0942fbf4c27ba3841a044a24bc34118b,
-        type: 2}
-      propertyPath: _MaxSpeed
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0942fbf4c27ba3841a044a24bc34118b, type: 2}
   m_IsPrefabParent: 0
