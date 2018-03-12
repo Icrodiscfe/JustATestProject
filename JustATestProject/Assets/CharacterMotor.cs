@@ -5,38 +5,49 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMotor : MonoBehaviour {
     [SerializeField]
-    private float _MoveSpeed = 3;
+    private float _Acceleration = 3;
+    [SerializeField]
+    private float _MaxSpeed = 2;
     [SerializeField]
     private float _JumpForce = 250;
 
     private Rigidbody2D myRigidbody;
     private Vector2 velocity = new Vector2();
-    private Collider2D collider = null;
+    private Collider2D myCollider = null;
 
     public bool IsOnGround
     {
         get
         {
-            return Physics2D.Raycast(myRigidbody.position, Vector2.down, collider.bounds.size.y + 0.1f);
+            return Physics2D.Raycast(myRigidbody.position, Vector2.down, myCollider.bounds.size.y + 0.1f);
         }
     }
 
 	void Start ()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        collider = GetComponent<Collider2D>();
+        myCollider = GetComponent<Collider2D>();
 	}
 
     public void Move(float multiplier)
     {
-        //prevents falling :(
-        Vector2 speed = Vector2.right * multiplier * Time.deltaTime * _MoveSpeed;
+        Vector2 speed = Vector2.right * multiplier * Time.deltaTime * _Acceleration * 10000;
 
-        this.myRigidbody.MovePosition(myRigidbody.position + speed);
+        myRigidbody.AddForce(myRigidbody.position + speed);
+
+        if(myRigidbody.velocity.x > _MaxSpeed)
+        {
+            myRigidbody.velocity = new Vector2(_MaxSpeed, myRigidbody.velocity.y);
+        }
+        else if (myRigidbody.velocity.x < -_MaxSpeed)
+        {
+            myRigidbody.velocity = new Vector2(-_MaxSpeed, myRigidbody.velocity.y);
+
+        }
     }
 
     public void Jump(float multiplier)
     {
-        this.myRigidbody.AddForce(Vector2.up * _JumpForce, ForceMode2D.Impulse);
+        myRigidbody.AddForce(Vector2.up * _JumpForce, ForceMode2D.Impulse);
     }
 }
