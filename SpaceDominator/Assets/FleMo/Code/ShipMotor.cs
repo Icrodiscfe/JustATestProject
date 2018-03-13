@@ -18,6 +18,8 @@ public class ShipMotor : MonoBehaviour, IShipMotor
     private float _RotationSpeed = 10000;
     [SerializeField]
     private float _Brake = 10000;
+    [SerializeField]
+    private GameObject Test;
 
     void Start()
     {
@@ -56,5 +58,9 @@ public class ShipMotor : MonoBehaviour, IShipMotor
     /// <param name="direction">The normalized direction the ship should face to</param>
     private void RotateTowards(Vector3 direction)
     {
+        Vector3 target = this.transform.position + direction;
+        Test.transform.position = target;
+        Quaternion rotateTo = Quaternion.FromToRotation(this.transform.position, target);
+        transform.LookAt(target);  
     }
 }
