@@ -10,6 +10,8 @@ public class CharacterMotor : MonoBehaviour {
     private float _MaxSpeed = 2;
     [SerializeField]
     private float _JumpForce = 250;
+    [SerializeField]
+    private float _CharacterHeight = 2;
 
     private Rigidbody2D myRigidbody;
     private Vector2 velocity = new Vector2();
@@ -19,7 +21,7 @@ public class CharacterMotor : MonoBehaviour {
     {
         get
         {
-            return Physics2D.Raycast(myRigidbody.position, Vector2.down, myCollider.bounds.size.y + 0.1f);
+            return Physics2D.Raycast(myRigidbody.position, Vector2.down, _CharacterHeight / 2 + 0.1f);
         }
     }
 
