@@ -13,4 +13,16 @@ public interface IShipMotor {
     /// Slows down the ship by brake force.
     /// </summary>
     void SlowDown();
+
+    /// <summary>
+    /// Returns a object ob IShipMotorSettings to get the values of the ship
+    /// </summary>
+    /// <returns>Actual IShipMotorSettings</returns>
+    ShipMotorSettings GetMotorSettings();
+
+    /// <summary>
+    /// Returns the actual speed of the ship
+    /// </summary>
+    /// <returns>Speed as float</returns>
+    float GetSpeed();
 }

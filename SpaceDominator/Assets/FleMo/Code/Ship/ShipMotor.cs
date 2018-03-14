@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,18 +9,11 @@ using UnityEngine;
 /// </summary>
 public class ShipMotor : MonoBehaviour, IShipMotor
 {
+    [SerializeField]
+    ShipMotorSettings _MotorSettings;
+
     private Rigidbody myRigidbody;
 
-    [SerializeField]
-    private float _Thrust = 10000;
-    [SerializeField]
-    private float _MaxSpeed = 100;
-    [SerializeField]
-    private float _RotationSpeed = 10000;
-    [SerializeField]
-    private float _Brake = 10000;
-    [SerializeField]
-    private GameObject Test;
 
     void Start()
     {
@@ -32,13 +26,12 @@ public class ShipMotor : MonoBehaviour, IShipMotor
     /// <param name="direction">The normalized direction the ship should move to.</param>
     public void Move(Vector3 direction)
     {
-        myRigidbody.AddForce(direction * _Thrust);
+        myRigidbody.AddForce(direction * _MotorSettings.Thrust);
 
-        if(myRigidbody.velocity.magnitude > _MaxSpeed)
+        if(myRigidbody.velocity.magnitude > _MotorSettings.MaxSpeed)
         {
-            myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, _MaxSpeed);
+            myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, _MotorSettings.MaxSpeed);
         }
-
 
         RotateTowards(direction);
     }
@@ -48,7 +41,7 @@ public class ShipMotor : MonoBehaviour, IShipMotor
     /// </summary>
     public void SlowDown()
     {
-        Vector3 br = myRigidbody.velocity.normalized * -1 * _Brake;
+        Vector3 br = myRigidbody.velocity.normalized * -1 * _MotorSettings.Brake;
         myRigidbody.AddForce(br);
     }
 
@@ -59,8 +52,17 @@ public class ShipMotor : MonoBehaviour, IShipMotor
     private void RotateTowards(Vector3 direction)
     {
         Vector3 target = this.transform.position + direction;
-        Test.transform.position = target;
         Quaternion rotateTo = Quaternion.FromToRotation(this.transform.position, target);
         transform.LookAt(target);  
+    }
+
+    public ShipMotorSettings GetMotorSettings()
+    {
+        return _MotorSettings;
+    }
+
+    public float GetSpeed()
+    {
+        return myRigidbody.velocity.magnitude;
     }
 }

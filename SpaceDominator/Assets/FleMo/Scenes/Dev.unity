@@ -478,11 +478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c3a1e1cbac18a4bb724184f3c94080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Thrust: 1000000
-  _MaxSpeed: 100
-  _RotationSpeed: 10000
-  _Brake: 500000
-  Test: {fileID: 661937647}
+  _MotorSettings: {fileID: 11400000, guid: b477c9d4ba8a8324887fc8e3ff0e79ff, type: 2}
 --- !u!114 &539456646
 MonoBehaviour:
   m_ObjectHideFlags: 0
