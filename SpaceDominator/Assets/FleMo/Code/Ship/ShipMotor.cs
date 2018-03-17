@@ -52,8 +52,14 @@ public class ShipMotor : MonoBehaviour, IShipMotor
     private void RotateTowards(Vector3 direction)
     {
         Vector3 target = this.transform.position + direction;
+        Quaternion actualRotation = myRigidbody.rotation;
         Quaternion rotateTo = Quaternion.FromToRotation(this.transform.position, target);
-        transform.LookAt(target);  
+        transform.LookAt(target);
+        Quaternion targetRotation = myRigidbody.rotation;
+        myRigidbody.rotation = actualRotation;
+
+        myRigidbody.AddTorque(Vector3.up * _MotorSettings.RotationSpeed);
+        //myRigidbody.MoveRotation(targetRotation);
     }
 
     public ShipMotorSettings GetMotorSettings()
