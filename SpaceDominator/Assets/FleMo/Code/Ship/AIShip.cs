@@ -3,37 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IShipController))]
-public class AIShip : MonoBehaviour {
+public class AIShip : MonoBehaviour, IAIShip {
 
     [SerializeField]
     AISettings _AiSetting;
 
-    GameObject player;
+    Vector3? flyTo = null;
     IShipController shipController;
+    IAIGroup aiGroup;
 
 	void Start ()
     {
         shipController = GetComponent<IShipController>();
-        player = GameObject.FindGameObjectWithTag(Tags.Player);
+        aiGroup = GetComponentInParent<IAIGroup>();
 	}
 
     void Update()
     {
-        CheckIfPlayerInRange();
+        FlyTo();
     }
 
-    private void CheckIfPlayerInRange()
+    private void FlyTo()
     {
-        float distance = Vector3.Distance(this.transform.position, player.transform.position);
-        Debug.Log(distance);
-        if (distance <= _AiSetting.Sight && distance > _AiSetting.MinApproachDistance)
-        {
-            Vector3 direction = (player.transform.position - this.transform.position).normalized;
-            shipController.Move(direction);
-        }
-        else
+        if(!flyTo.HasValue)
         {
             shipController.SlowDown();
+            return;
         }
+
+        Vector3 direction = (flyTo.Value - this.transform.position).normalized;
+        shipController.Move(direction);
+    }
+
+    public void SetTarget(Vector3? target)
+    {
+        flyTo = target;
+    }
+
+    public AISettings GetAISettings()
+    {
+        return _AiSetting;
     }
 }
