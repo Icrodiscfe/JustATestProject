@@ -16,7 +16,6 @@ public class ShipController : MonoBehaviour, IShipController
     void FixedUpdate()
     {
         shipMotor.RotateTowards(rotateShipTowards);
-        Debug.Log(rotateShipTowards);
     }
 
     /// <summary>

@@ -11,9 +11,7 @@ public class ShipMotorSettings : ScriptableObject {
     [SerializeField]
     public float MaxSpeed = 100;
     [SerializeField]
-    public float RotationAcceleration = 10000;
-    [SerializeField]
-    public float MaxRotationSpeed = 10000;
+    public float RotationSpeed = 10000;
     [SerializeField]
     public float Brake = 10000;
 }
