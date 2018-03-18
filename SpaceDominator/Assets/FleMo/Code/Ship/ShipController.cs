@@ -6,7 +6,7 @@ using UnityEngine;
 public class ShipController : MonoBehaviour, IShipController
 {
     private IShipMotor shipMotor;
-    private Vector3 moveDirectionInput;
+    private Vector3 rotateShipTowards;
 
     void Start()
     {
@@ -15,19 +15,22 @@ public class ShipController : MonoBehaviour, IShipController
 
     void FixedUpdate()
     {
-        if (moveDirectionInput == Vector3.zero)
-        {
-            shipMotor.SlowDown();
-        }
+        shipMotor.RotateTowards(rotateShipTowards);
+        Debug.Log(rotateShipTowards);
     }
 
     /// <summary>
-    /// Calls the ship motor to move the ship to given direction. Must be called constantinous. If no movement is wished pass Vector3.zero
+    /// Calls the ship motor to move the ship to given direction. Must be called constantinous. If no movement is wished pass null
     /// </summary>
     /// <param name="direction">Normalized direction the ship should move to</param>
 	public void Move(Vector3 direction)
     {
-        moveDirectionInput = direction;
+        rotateShipTowards = direction;
         shipMotor.Move(direction);
+    }
+
+    public void SlowDown()
+    {
+        shipMotor.SlowDown();
     }
 }

@@ -12,9 +12,16 @@ public class MyInput : MonoBehaviour
         shipController = GetComponent<IShipController>();
     }
 
-	void Update ()
+    void Update()
     {
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-        shipController.Move(movement);
+        if (Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
+        { 
+            Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            shipController.Move(movement);
+        }
+        else
+        {
+            shipController.SlowDown();
+        }
     }
 }

@@ -8,4 +8,9 @@ public interface IShipController {
     /// </summary>
     /// <param name="direction">Normalized direction the ship should move to</param>
     void Move(Vector3 direction);
+
+    /// <summary>
+    /// Slows down the ship by brake force
+    /// </summary>
+    void SlowDown();
 }
