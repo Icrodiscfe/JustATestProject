@@ -72,16 +72,15 @@ public class AIMesh : MonoBehaviour
             X = x;
             Y = y;
             MinX = (int)player.transform.position.x - _X / 2;
-            MinY = (int)player.transform.position.y - _Y / 2;
+            MinY = (int)player.transform.position.z - _Y / 2;
             MaxX = (int)player.transform.position.x + _X / 2;
-            MaxY = (int)player.transform.position.y + _Y / 2;
+            MaxY = (int)player.transform.position.z + _Y / 2;
             PlayerMoved();
         }
     }
 
     private void PlayerMoved()
     {
-        //return;
         meshField.Where(f =>
             f.X < MinX ||
             f.Y < MinY ||
@@ -95,7 +94,7 @@ public class AIMesh : MonoBehaviour
             for(int y = MinY; y <= MaxY; y++)
             {
                 MeshField field = meshField.Cast<MeshField>().Where(f => f.X == x && f.Y == y).FirstOrDefault();
-
+                    
                 if(field == null)
                 {
                     MeshField mf = freeFields.Pop();
@@ -105,7 +104,7 @@ public class AIMesh : MonoBehaviour
 
                 if (_Visualize)
                 {
-                    visualizeObjects[counter].transform.position = new Vector3(x * _SizeX, 0.1f, y * _SizeY);
+                    visualizeObjects[counter].transform.position = new Vector3(x, 0.1f, y);
                 }
 
                 counter++;

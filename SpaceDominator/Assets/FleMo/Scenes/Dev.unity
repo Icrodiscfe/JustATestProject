@@ -594,6 +594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 828816552}
   - component: {fileID: 828816551}
+  - component: {fileID: 828816553}
   m_Layer: 0
   m_Name: ScriptHolder
   m_TagString: Untagged
@@ -612,10 +613,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36669b43249d584ebd2dbd7684cd6fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SizeX: 10
-  _SizeY: 10
-  _X: 3
-  _Y: 3
+  _SizeX: 1
+  _SizeY: 1
+  _X: 11
+  _Y: 11
   _Visualize: 1
   _VisualizeObject: {fileID: 1545452634978754, guid: b5a3902e40f8f26469ef2b78b2e952eb,
     type: 2}
@@ -634,6 +635,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &828816553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 828816550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b307bd1bd96aa418ecc0a7547f6114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &870014134
 GameObject:
   m_ObjectHideFlags: 0
