@@ -6,7 +6,7 @@ using UnityEngine;
 public class AIMesh : MonoBehaviour
 {
     private GameObject player;
-    private List<MeshField> meshField;
+    private List<MeshField> meshFields;
     private Stack<MeshField> freeFields;
     private List<GameObject> visualizeObjects;
 
@@ -18,9 +18,9 @@ public class AIMesh : MonoBehaviour
     public int MaxY { get; private set; }
 
     [SerializeField]
-    private float _SizeX;
+    private int _SizeX;
     [SerializeField]
-    private float _SizeY;
+    private int _SizeY;
     [SerializeField]
     private int _X;
     [SerializeField]
@@ -43,7 +43,7 @@ public class AIMesh : MonoBehaviour
         MinY = (int)player.transform.position.y - _Y / 2;
         MaxX = (int)player.transform.position.x + _X / 2;
         MaxY = (int)player.transform.position.y + _Y / 2;
-        meshField = new List<MeshField>();
+        meshFields = new List<MeshField>();
 
         if (_Visualize)
         {
@@ -52,10 +52,14 @@ public class AIMesh : MonoBehaviour
 
         for (var i = 0; i < _X * _Y; i++)
         {
-            meshField.Add(new MeshField(int.MinValue, int.MinValue, _SizeX, _SizeY));
-            GameObject go = Instantiate(_VisualizeObject);
-            go.transform.localScale = new Vector3(_SizeX * _SizeXMultiplier, 1, _SizeY * _SizeYMultiplier);   
-            visualizeObjects.Add(go);
+            meshFields.Add(new MeshField(int.MinValue, int.MinValue, _SizeX, _SizeY));
+
+            if (_Visualize)
+            {
+                GameObject go = Instantiate(_VisualizeObject);
+                go.transform.localScale = new Vector3(_SizeX * _SizeXMultiplier, 1, _SizeY * _SizeYMultiplier);
+                visualizeObjects.Add(go);
+            }
         }
 
         freeFields = new Stack<MeshField>();
@@ -69,32 +73,33 @@ public class AIMesh : MonoBehaviour
 
         if(x != X || y != Y)
         {
-            X = x;
-            Y = y;
-            MinX = (int)player.transform.position.x - _X / 2;
-            MinY = (int)player.transform.position.z - _Y / 2;
-            MaxX = (int)player.transform.position.x + _X / 2;
-            MaxY = (int)player.transform.position.z + _Y / 2;
+            X = x / _SizeX;
+            Y = y / _SizeY;
+            MinX = X - _X / 2;
+            MinY = Y - _Y / 2;
+            MaxX = X + _X / 2;
+            MaxY = Y + _Y / 2;
             PlayerMoved();
         }
     }
 
     private void PlayerMoved()
     {
-        meshField.Where(f =>
-            f.X < MinX ||
-            f.Y < MinY ||
-            f.X > MaxX ||
-            f.Y > MinY).ToList().ForEach(f => freeFields.Push(f));
-
+        //meshFields.Where(f =>
+        //    f.X < MinX ||
+        //    f.Y < MinY ||
+        //    f.X > MaxX ||
+        //    f.Y > MinY).ToList().ForEach(f => freeFields.Push(f));
+        SetFreeFields();
         int counter = 0;
 
         for(int x = MinX; x <= MaxX; x++)
         {
             for(int y = MinY; y <= MaxY; y++)
             {
-                MeshField field = meshField.Cast<MeshField>().Where(f => f.X == x && f.Y == y).FirstOrDefault();
-                    
+                //MeshField field = meshFields.Cast<MeshField>().Where(f => f.X == x && f.Y == y).FirstOrDefault();
+                MeshField field = GetField(x, y);    
+
                 if(field == null)
                 {
                     MeshField mf = freeFields.Pop();
@@ -104,10 +109,40 @@ public class AIMesh : MonoBehaviour
 
                 if (_Visualize)
                 {
-                    visualizeObjects[counter].transform.position = new Vector3(x, 0.1f, y);
+                    int xPos = x * 10; 
+                    int yPos = y * 10;
+                    visualizeObjects[counter].transform.position = new Vector3(xPos, 0.1f, yPos);
                 }
 
                 counter++;
+            }
+        }
+    }
+
+    private MeshField GetField(int x, int y)
+    {
+        foreach(MeshField field in meshFields)
+        {
+            if(field.X == x && field.Y == y)
+            {
+                return field;
+            }
+        }
+
+        return null;
+    }
+
+    private void SetFreeFields()
+    {
+        freeFields.Clear();
+        foreach(MeshField field in meshFields)
+        {
+            if(field.X <= MinX ||
+                field.Y <= MinY ||
+                field.X >= MaxY ||
+                field.Y >= MaxY)
+            {
+                freeFields.Push(field);
             }
         }
     }
