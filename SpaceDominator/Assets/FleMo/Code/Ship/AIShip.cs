@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IShipController))]
-public class AIShip : MonoBehaviour, IAIShip {
-
+public class AIShip : MonoBehaviour, IAIShip
+{
     [SerializeField]
     AISettings _AiSetting;
 
     Vector3? flyTo = null;
     IShipController shipController;
-    IAIGroup aiGroup;
 
-	void Start ()
+    void Start()
     {
         shipController = GetComponent<IShipController>();
-        aiGroup = GetComponentInParent<IAIGroup>();
-	}
+    }
 
     void Update()
     {
@@ -25,7 +23,7 @@ public class AIShip : MonoBehaviour, IAIShip {
 
     private void FlyTo()
     {
-        if(!flyTo.HasValue)
+        if (!flyTo.HasValue)
         {
             shipController.SlowDown();
             return;

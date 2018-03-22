@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISpawnableObject
 {
-    
+    void Spawn(Vector3 position);
 }

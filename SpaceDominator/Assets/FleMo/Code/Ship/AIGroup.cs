@@ -1,13 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AIGroup : MonoBehaviour, IAIGroup {
+public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
 
     GameObject player;
     IAIShip[] iAIShips;
 
+    [Header("Spawn")]
+    [SerializeField]
+    private SpawnableShip[] _SpawnableShips;
+    [SerializeField, Range(20, 100)]
+    private float _RadiusMin = 20;
+    [SerializeField, Range(20, 100)]
+    private float _RadiusMax = 100;
+    [SerializeField, Range(1, 20)]
+    private int _UnitsMin = 1;
+    [SerializeField, Range(1, 20)]
+    private int _UnitsMax = 20;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag(Tags.Player);
@@ -60,4 +72,47 @@ public class AIGroup : MonoBehaviour, IAIGroup {
 
         return false;
     }
+
+    public void Spawn(Vector3 position)
+    {
+        var x = 2;
+    }
+
+    #region On validate
+    void OnValidate()
+    {
+        ValidateSpawnableShips();
+        ValidateRanges();
+        ValidateUnitsCount();
+    }
+
+    void ValidateSpawnableShips()
+    {
+        foreach(var item in _SpawnableShips)
+        {
+            if(item == null)
+            {
+                continue;
+            }
+
+            item.OnValidate();
+        }
+    }
+
+    void ValidateRanges()
+    {
+        if(_RadiusMin > _RadiusMax)
+        {
+            _RadiusMax = _RadiusMin;
+        }
+    }
+
+    void ValidateUnitsCount()
+    {
+        if(_UnitsMin > _UnitsMax)
+        {
+            _UnitsMax = _UnitsMin;
+        }
+    }
+    #endregion
 }

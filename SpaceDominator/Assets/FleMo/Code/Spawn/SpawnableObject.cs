@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnableObject : MonoBehaviour, ISpawnableObject {
+[System.Serializable]
+public class SpawnableObject
+{
     [SerializeField]
-    private int[] _AIs;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public GameObject _SpawnableObject;
+    [SerializeField, Range(0.1f, 100f)]
+    public float _SpawnChance = 100;
 }
