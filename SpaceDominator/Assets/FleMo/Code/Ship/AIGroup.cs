@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
+public class AIGroup : MonoBehaviour, ISpawnableObject {
 
     GameObject player;
+    Rigidbody playerRigidbody;
     IAIShip[] iAIShips;
+    float spawnSum = 0;
 
     [Header("Spawn")]
     [SerializeField]
@@ -20,36 +22,37 @@ public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
     private int _UnitsMin = 1;
     [SerializeField, Range(1, 20)]
     private int _UnitsMax = 20;
+
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag(Tags.Player);
+        playerRigidbody = player.GetComponent<Rigidbody>();
         iAIShips = transform.Cast<Transform>().Select(x => x.GetComponent<IAIShip>()).ToArray();
+
+        foreach(SpawnableShip ss in _SpawnableShips)
+        {
+            spawnSum += ss._SpawnChance;
+        }
     }
 
     void Update()
     {
-        bool isInRange = false;
-        foreach(IAIShip ship in iAIShips)
+        if(CheckIfPlayerInRange())
         {
-            isInRange = CheckIfPlayerInRange();
-            
-            if(isInRange)
-            {
-                break;
-            }
-        }
-
-        if(isInRange)
-        {
-            SetTarget(player.transform.position);
+            SetTargetByRigidbody(playerRigidbody);
         }
         else
         {
-            SetTarget(null);
+            SetTargetByRigidbody(null);
         }
     }
 
-    public void SetTarget(Vector3? position)
+    /// <summary>
+    /// Set the target where the ai ships should fly to
+    /// </summary>
+    /// <param name="position">Null if stay at position</param>
+    private void SetTargetByVector(Vector3? position)
     {
         foreach(IAIShip child in iAIShips)
         {
@@ -57,6 +60,18 @@ public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
         }
     }
 
+    private void SetTargetByRigidbody(Rigidbody rigidbody)
+    {
+        foreach (IAIShip child in iAIShips)
+        {
+            child.SetTarget(rigidbody);
+        }
+    }
+
+    /// <summary>
+    /// Check if player is in range of any of the ai in the group
+    /// </summary>
+    /// <returns>True if player is in range</returns>
     private bool CheckIfPlayerInRange()
     {
         foreach (Transform shipTransform in transform)
@@ -73,10 +88,49 @@ public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
         return false;
     }
 
+    #region spawn
+    /// <summary>
+    /// Spawns random group of enemys
+    /// </summary>
+    /// <param name="position">Position of Group</param>
     public void Spawn(Vector3 position)
     {
-        var x = 2;
+        this.transform.position = position;
+        int unitsToSpawn = UnityEngine.Random.Range(_UnitsMin, _UnitsMax);
+        iAIShips = new IAIShip[unitsToSpawn];
+
+        for(var i = 0; i < unitsToSpawn; i++)
+        {
+            GameObject ship = Instantiate(GetRandomSpawnableShip());
+            iAIShips[i] = ship.GetComponent<IAIShip>();
+            ship.transform.SetParent(transform);
+            ship.transform.position = MyRandom.RandomVector3InCircle(_RadiusMin, _RadiusMax) + this.transform.position;
+        }
     }
+
+    /// <summary>
+    /// Returns a random spawnable ship
+    /// </summary>
+    /// <returns>Spawnable ship as GameObject</returns>
+    private GameObject GetRandomSpawnableShip()
+    {
+        float chance = UnityEngine.Random.Range(0, spawnSum);
+        float counter = 0;
+
+        foreach(SpawnableShip ss in _SpawnableShips)
+        {
+            counter += ss._SpawnChance;
+
+            if(chance < counter)
+            {
+                return ss._SpawnableShip;
+            }
+        }
+
+        Debug.LogError("Something wrent wrong with chance-calculation on spawnable ship");
+        return default(GameObject);
+    }
+    #endregion
 
     #region On validate
     void OnValidate()

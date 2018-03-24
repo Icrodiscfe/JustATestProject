@@ -54,8 +54,8 @@ MonoBehaviour:
   _SpawnableShips:
   - _SpawnableShip: {fileID: 1612843365627102, guid: cf72d2346a592a4439936c31ed9c52c2,
       type: 2}
-    SpawnChance: 0
+    _SpawnChance: 100
   _RadiusMin: 20
   _RadiusMax: 100
   _UnitsMin: 1
-  _UnitsMax: 20
+  _UnitsMax: 1

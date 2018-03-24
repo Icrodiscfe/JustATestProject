@@ -5,5 +5,6 @@ using UnityEngine;
 public interface IAIShip
 {
     void SetTarget(Vector3? target);
+    void SetTarget(Rigidbody rigidbody);
     AISettings GetAISettings();
 }

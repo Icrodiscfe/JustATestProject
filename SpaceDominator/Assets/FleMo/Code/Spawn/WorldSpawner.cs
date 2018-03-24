@@ -13,7 +13,8 @@ public class WorldSpawner : MonoBehaviour
     [SerializeField]
     private float _MaxSpawnDistance = 500;
 
-    private float spawnSum; 
+    private float spawnSum;
+    private GameObject player;
 
     void Start()
     {
@@ -28,22 +29,34 @@ public class WorldSpawner : MonoBehaviour
             spawnSum += so._SpawnChance;
         }
 
+        player = GameObject.FindGameObjectWithTag(Tags.Player);
+
         Spawn();
     }
 
-    void Spawn()
+    /// <summary>
+    /// Spawns a random object near players position
+    /// </summary>
+    public void Spawn()
     {
-        float rnd = Random.Range(0, spawnSum);
-        SpawnableObject spawnableObject = GetSpawnableObject(rnd);
+        SpawnableObject spawnableObject = GetRandomSpawnableObject();
 
         GameObject go = Instantiate(spawnableObject._SpawnableObject);
         ISpawnableObject iso = go.GetComponent<ISpawnableObject>();
-        iso.Spawn(Vector3.zero);
+        float distance = Random.Range(_MinSpawnDistance, _MaxSpawnDistance);
+
+        iso.Spawn(player.transform.position + MyRandom.RandomVector3InCircle(distance));
     }
 
-    private SpawnableObject GetSpawnableObject(float chance)
+    /// <summary>
+    /// Returns a random spawnable object
+    /// </summary>
+    /// <returns>Random Spawnable Object</returns>
+    private SpawnableObject GetRandomSpawnableObject()
     {
+        float chance = Random.Range(0, spawnSum);
         float counter = 0;
+
         foreach(SpawnableObject spawnableObject in _SpawnableObjects)
         {
             counter += spawnableObject._SpawnChance;
