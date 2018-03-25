@@ -4,12 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AIGroup : MonoBehaviour, ISpawnableObject {
+public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
 
     GameObject player;
     Rigidbody playerRigidbody;
     IAIShip[] iAIShips;
     float spawnSum = 0;
+    IAIGroupStatics.AlertStates AlterState;
+    int lastGroupCount = 0;
+
+    bool FlyInFormation { get; set; }
+    //[SerializeField]
+    
+
 
     [Header("Spawn")]
     [SerializeField]
@@ -34,19 +41,33 @@ public class AIGroup : MonoBehaviour, ISpawnableObject {
         {
             spawnSum += ss._SpawnChance;
         }
+
+        CheckGoup();
     }
 
     void Update()
     {
+        CheckGoup();
+
         if(CheckIfPlayerInRange())
         {
+            FlyInFormation = false;
             SetTargetByRigidbody(playerRigidbody);
         }
         else
         {
+            FlyInFormation = true;
             SetTargetByRigidbody(null);
         }
+
+        Spawn(this.transform.position);
     }
+
+    void CheckGoup()
+    {
+        throw new NotImplementedException();
+    }
+
 
     /// <summary>
     /// Set the target where the ai ships should fly to
@@ -86,6 +107,16 @@ public class AIGroup : MonoBehaviour, ISpawnableObject {
         }
 
         return false;
+    }
+
+    public float GetGroupSpeed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IAIGroupStatics.AlertStates GetAlertState()
+    {
+        throw new NotImplementedException();
     }
 
     #region spawn

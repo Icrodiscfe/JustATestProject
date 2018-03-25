@@ -30,8 +30,6 @@ public class WorldSpawner : MonoBehaviour
         }
 
         player = GameObject.FindGameObjectWithTag(Tags.Player);
-
-        Spawn();
     }
 
     /// <summary>

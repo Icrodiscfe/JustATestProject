@@ -17,13 +17,31 @@ public class WaypointGroupEditor : Editor
             wpg.Waypoints = new List<GameObject>();
         }
 
-        EditorGUILayout.HelpBox("Add empty gameobjects and order them for waypoints." +
-            " After added press build. On changes press build again. First waypoint will be set to goup position.", MessageType.None);
+        EditorGUILayout.HelpBox("Do NOT add or delete waypoint manually!", MessageType.Warning);
 
         if(GUILayout.Button("Add waypoint"))
         {
             GameObject wp = new GameObject();
-            wp.name = "Waypoint " + (wpg.Waypoints.Count + 1);
+            string name = "";
+
+            int counter = 1;
+            bool nameFound = false;
+            while (!nameFound)
+            {
+                name = "Waypoint " + counter++;
+                nameFound = true;
+
+                foreach(GameObject go in wpg.Waypoints)
+                {
+                    if(go.name == name)
+                    {
+                        nameFound = false;
+                        break;
+                    }
+                }
+            }
+
+            wp.name = name;
             wp.AddComponent(typeof(Waypoint));
             wp.transform.position = wpg.transform.position;
 
@@ -44,24 +62,38 @@ public class WaypointGroupEditor : Editor
 
         for(int i = 0; i < wpg.Waypoints.Count; i++)
         {
-            string name = "Waypoint " + (i + 1);
             EditorGUILayout.BeginHorizontal();
             Waypoint wp = wpg.Waypoints[i].GetComponent<Waypoint>();
 
-            if (GUILayout.Button(name, EditorStyles.miniButton))
+            GUILayout.Label((i + 1) + ".", EditorStyles.label);
+
+            if (GUILayout.Button(wp.gameObject.name, EditorStyles.miniButton))
             {
                 Tools.current = Tool.None;
                 selectedWaypoint = wpg.Waypoints[i].GetComponent<Waypoint>();
+                SceneView.RepaintAll();
             }
 
             if(GUILayout.Button("Up", EditorStyles.miniButton))
             {
-
+                if (i > 0)
+                {
+                    GameObject go = wp.gameObject;
+                    wpg.Waypoints.Remove(go);
+                    wpg.Waypoints.Insert(i - 1, go);
+                    SceneView.RepaintAll();
+                }
             }
 
             if(GUILayout.Button("Down", EditorStyles.miniButton))
             {
-
+                if (i < wpg.Waypoints.Count - 1)
+                {
+                    GameObject go = wp.gameObject;
+                    wpg.Waypoints.Remove(go);
+                    wpg.Waypoints.Insert(i + 1, go);
+                    SceneView.RepaintAll();
+                }
             }
 
             if(GUILayout.Button("Delete", EditorStyles.miniButton))
@@ -69,11 +101,15 @@ public class WaypointGroupEditor : Editor
                 GameObject wpGo = wpg.Waypoints[i];
                 wpg.Waypoints.Remove(wpGo);
                 DestroyImmediate(wpGo);
+                SceneView.RepaintAll();
             }
 
             EditorGUILayout.EndHorizontal();
 
-            wp.ShowInInspector = EditorGUILayout.Foldout(wp.ShowInInspector, name);
+            if (wp != null)
+            {
+                wp.ShowInInspector = EditorGUILayout.Foldout(wp.ShowInInspector, wp.gameObject.name);
+            }
 
             if (wp.ShowInInspector)
             {

@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1372e084d584e2840b3a96a20860cb90, type: 3}
   m_Name: AISetting
   m_EditorClassIdentifier: 
-  Sight: 6000
+  Sight: 0
   MinApproachDistance: 10
   PathFindingAlgorithm: 2
