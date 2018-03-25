@@ -13,5 +13,4 @@ public static class TransformExtension
 
         return x + z + y < 0;
     }
-	
 }

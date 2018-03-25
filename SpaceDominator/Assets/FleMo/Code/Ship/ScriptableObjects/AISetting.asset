@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Name: AISetting
   m_EditorClassIdentifier: 
   Sight: 6000
-  MinApproachDistance: 20
-  MaxApproachDistance: 30
+  MinApproachDistance: 10
+  PathFindingAlgorithm: 2

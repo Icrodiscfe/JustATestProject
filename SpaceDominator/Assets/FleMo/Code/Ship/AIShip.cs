@@ -42,11 +42,18 @@ public class AIShip : MonoBehaviour, IAIShip
         }
         else if(flyToRigidbody != null)
         {
-            Vector3 vr = flyToRigidbody.velocity - myRigidbody.velocity;
-            Vector3 sr = flyToRigidbody.position - myRigidbody.position;
-            float tc = sr.magnitude / vr.magnitude;
-            Vector3 st = flyToRigidbody.position + (flyToRigidbody.velocity * tc);
-            direction = (st - this.transform.position).normalized;
+            switch (_AiSetting.PathFindingAlgorithm)
+            {
+                case AISettings.PathFindingAlgorithms.LineOfSight:
+                    direction = transform.position.GetDirection(flyToRigidbody.position);
+                    break;
+                case AISettings.PathFindingAlgorithms.Interception:
+                    direction = myRigidbody.GetInterceptionPoint(flyToRigidbody, true);
+                    break;
+                case AISettings.PathFindingAlgorithms.CorrectedInterception:
+                    direction = myRigidbody.GetCorrectedInterceptionPoint(flyToRigidbody, true);
+                    break;
+            }
         }
         
         if (direction.HasValue)
@@ -54,6 +61,8 @@ public class AIShip : MonoBehaviour, IAIShip
             shipController.Move(direction.Value);
         }
     }
+
+    
 
     public void SetTarget(Vector3? target)
     {

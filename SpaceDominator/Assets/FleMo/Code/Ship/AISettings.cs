@@ -9,6 +9,11 @@ public class AISettings : ScriptableObject
     public float Sight = 70;
     [SerializeField]
     public float MinApproachDistance = 20;
+    
+
+    public enum PathFindingAlgorithms { LineOfSight, Interception, CorrectedInterception }
     [SerializeField]
-    private float MaxApproachDistance = 30;
+    public PathFindingAlgorithms PathFindingAlgorithm;
+    
+    
 }
