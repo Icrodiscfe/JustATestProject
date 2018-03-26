@@ -42,12 +42,13 @@ public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
             spawnSum += ss._SpawnChance;
         }
 
-        CheckGoup();
+        //CheckGoup();
+        Spawn(this.transform.position);
     }
 
     void Update()
     {
-        CheckGoup();
+        //CheckGoup();
 
         if(CheckIfPlayerInRange())
         {
@@ -59,8 +60,6 @@ public class AIGroup : MonoBehaviour, IAIGroup, ISpawnableObject {
             FlyInFormation = true;
             SetTargetByRigidbody(null);
         }
-
-        Spawn(this.transform.position);
     }
 
     void CheckGoup()

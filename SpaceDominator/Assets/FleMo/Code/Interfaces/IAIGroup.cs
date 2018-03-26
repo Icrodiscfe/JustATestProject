@@ -20,5 +20,5 @@ public interface IAIGroup
 
 public static class IAIGroupStatics
 {
-    public enum AlertStates { None, Alarm }
+    public enum AlertStates { None }
 }
